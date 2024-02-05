@@ -1,0 +1,88 @@
+{% extends "base.njk" %}
+
+{% block titulo %}Habitaciones | Ficha{% endblock %}
+
+{% block contenido %}
+
+  <div class="row m-auto">
+    <h1 class="text-center">Ficha de habitación {{ habitacion.numero }}</h1>
+    <div class="col-md-5 m-auto">
+    <div class="card mt-4">
+      <h5 class="card-header bg-dark text-white">Habitación {{ habitacion.numero }}</h5>
+      <div class="card-body">
+        <p><strong>Tipo: </strong>{{ habitacion.tipo }}</p>
+        <p>
+          <strong>Descripción: </strong>{{ habitacion.descripcion }}
+        </p>
+        <p><strong>Precio: </strong> {{ habitacion.precio }}€</p>
+        {% if habitacion.imagen %}
+          <p class="text-center"><img src="/public/uploads/{{ habitacion.imagen }}" style="max-width: 300px; border-radius: 10px"></p>
+        {% endif %}
+        <form action="/habitaciones/{{ habitacion._id }}" method="post">
+          <input type="hidden" name="_method" value="delete">
+          {% if session and session.usuario %}
+          <p class="text-center"><button type="submit" class="btn btn-danger mt-3">Borrar habitación</button></p>
+          {% endif %}
+        </form>
+        <hr>
+        <div class="card mb-3">
+          <h5 class="card-header">Incidencias:</h5>
+          <div class="card-body text-center">
+            <hr>
+            {% if session and session.usuario %}
+              <form action="/habitaciones/{{ habitacion._id }}/incidencias" method="post" enctype="multipart/form-data">
+                <div class="form-group mb-3">
+                  <label for="descripcion">Descripción:</label>
+                    <input type="text" class="form-control" id="descripcion" name="descripcion" 
+                        placeholder="Descripción...">
+                  {% if errores.descripcion %}
+                    <p class="text-danger">{{ errores.descripcion }}</p>
+                  {% endif %}
+                </div>
+                <div class="form-group mb-3">
+                  <label for="imagen">Imagen:</label>
+                  <input type="file" class="form-control" id="imagen" name="imagen"
+                        placeholder="Imagen de la habitación..."/>
+                </div>
+                {% if session and session.usuario %}
+                  <button type="submit" class="btn btn-primary">Registrar incidencia</button>
+                {% endif %}
+              </form>
+              <hr>
+            {% endif %}
+            {% for incidencia in habitacion.incidencias %}
+              <div class="row">
+              <p class="card-text col-6"><strong>Inicio:</strong> {{ incidencia.fechaInicio | date }}</p>
+              {% if incidencia.fechaFin %}
+                <p class="card-text col-6"><strong>Fin:</strong> {{ incidencia.fechaFin | date }}</p>
+              {% else %}
+                {% if session and session.usuario %}
+                <form action="/habitaciones/{{ habitacion._id }}/incidencias/{{ incidencia._id }}" method="POST" id="cerrarIncidenciaForm{{ incidencia._id }}">
+                  <input type="hidden" name="_method" value="PUT">
+                  <button type="submit" class="btn btn-sm btn-danger col-4 ms-5 mb-3">Cerrar</button>
+                </form>
+                {% endif %}
+              {% endif %}
+              </div>
+              <p class="card-text text-danger">{{ incidencia.descripcion }}</p>
+              {% if habitacion.imagen %}
+                <p class="text-center"><img src="/public/uploads/{{ incidencia.imagen }}" style="max-width: 200px; border-radius: 10px"></p>
+              {% endif %}
+              <hr>
+            {% else %}
+              <p>No hay incidencias.</p>
+              <hr>
+            {% endfor %}
+          <div>
+        </div>
+      </div>
+      </div>
+      <div class="card mb-3">
+        <h5 class="card-header">Limpiezas:</h5>
+        <div class="card-body text-center">
+          <a class="btn btn-primary" href="/limpiezas/{{ habitacion.id }}">Ver limpiezas</a>
+        <div>
+      </div>
+  </div>
+
+{% endblock %}

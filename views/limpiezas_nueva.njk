@@ -1,0 +1,48 @@
+{% extends "base.njk" %}
+
+{% block titulo %}Limpiezas | Nueva{% endblock %}
+
+{% block contenido %}
+
+  <h1 class="mb-4 text-center">Registro de nueva limpieza</h1>
+  <div class="row">
+    <div class="col-lg-4 m-auto">
+      <div class="card">
+        <div class="card-header">
+      <h5 class="card-title mb-0 text-center">Nueva limpieza</h5>
+        </div>
+        <div class="card-body">
+          {% if errores.general %}
+            <p class="alert alert-danger">{{ errores.general }}</p>
+          {% endif %}
+
+          <form action="/limpiezas/{{ idHabitacion }}" method="post">
+            <div class="form-group mb-3">
+              <label for="fechaHora">Fecha y hora:</label>
+              {% if datos.fechaHora %}
+                <input type="datetime-local" class="form-control" id="fechaHora" name="fechaHora" 
+                    placeholder="Fecha y hora..." value="{{ datos.fechaHora }}">
+              {% else %}
+                <input type="datetime-local" class="form-control" id="fechaHora" name="fechaHora" 
+                    placeholder="Fecha y hora..." value="{{ fechaHoraPredeterminada }}">
+              {% endif %}
+              {% if errores.fechaHora %}
+                <p class="text-danger">{{ errores.fechaHora }}</p>
+              {% endif %}
+            </div>
+            <div class="form-group mb-3">
+              <label for="observaciones">Observaciones:</label>
+              <textarea class="form-control" id="observaciones" name="observaciones" 
+                    placeholder="Observaciones de la limpieza..." value="{{ datos.observaciones }}"></textarea>
+              {% if errores.observaciones %}
+                <p class="text-danger">{{ errores.observaciones }}</p>
+              {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary">Crear limpieza</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

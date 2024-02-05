@@ -1,0 +1,67 @@
+{% extends "base.njk" %}
+
+{% block titulo %}Habitaciones | Nueva{% endblock %}
+
+{% block contenido %}
+
+  <h1 class="mb-4 text-center">Inserción de nueva habitación</h1>
+  <div class="row">
+    <div class="col-lg-4 m-auto">
+      <div class="card">
+        <div class="card-header">
+      <h5 class="card-title mb-0 text-center">Nueva habitación</h5>
+        </div>
+        <div class="card-body">
+          {% if errores.general %}
+            <p class="alert alert-danger">{{ errores.general }}</p>
+          {% endif %}
+
+          <form action="/habitaciones" method="post" enctype="multipart/form-data">
+            <div class="form-group mb-3">
+              <label for="numero">Número:</label>
+              <input type="number" class="form-control" id="numero" name="numero" 
+                    placeholder="Número de habitación..." value="{{ datos.numero }}">
+              {% if errores.numero %}
+                <p class="text-danger">{{ errores.numero }}</p>
+              {% endif %}
+            </div>
+            <div class="form-group mb-3">
+              <label for="descripcion">Descripción:</label>
+              <textarea type="textarea" class="form-control" id="descripcion" name="descripcion" 
+                    placeholder="Descripción de la habitación..." value="{{ datos.descripcion }}"></textarea>
+              {% if errores.descripcion %}
+                <p class="text-danger">{{ errores.descripcion }}</p>
+              {% endif %}
+            </div>
+            <div class="form-group mb-3">
+              <label for="tipo">Tipo de habitación:</label>
+              <select class="form-select text-capitalize p-1" id="tipo" name="tipo">
+                {% for tipoDeHabitacion in tiposDeHabitacion %}
+                  <option class="form-option text-capitalize" value="{{ tipoDeHabitacion }}">{{ tipoDeHabitacion }}</option>
+                {% endfor %}
+              </select>
+              {% if errores.tipo %}
+                <p class="text-danger">{{ errores.tipo }}</p>
+              {% endif %}
+            </div>
+            <div class="form-group mb-3">
+              <label for="precio">Precio:</label>
+              <input type="text" class="form-control" id="precio" name="precio"
+                    placeholder="Precio de la habitación..." value="{{ datos.precio }}">
+              {% if errores.precio %}
+                <p class="text-danger">{{ errores.precio }}</p>
+              {% endif %}
+            </div>
+            <div class="form-group mb-3">
+              <label for="imagen">Imagen de la habitación:</label>
+              <input type="file" class="form-control" id="imagen" name="imagen"
+                    placeholder="Imagen de la habitación..."/>
+            </div>
+            <button type="submit" class="btn btn-primary">Crear habitación</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
